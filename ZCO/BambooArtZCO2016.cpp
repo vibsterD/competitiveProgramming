@@ -2,24 +2,24 @@
 #include<limits.h>
 #include<algorithm>
 #define endl '\n'
-
-typedef unsigned long long int ll;
-
+ 
+typedef long long int ll;
+ 
 using namespace std;
-
+ 
 int main(){
     std::ios_base::sync_with_stdio(false);cin.tie(NULL);
-
+ 
     ll n; cin >> n;
-    int Check[100001]={0};
-    ll R[n];
+    bool Check[1000001]={false};
+    int R[n];
     for(int i=0; i<n;i++){
         cin >> R[i];
         Check[R[i]]=1;
     }
     sort(R,R+n);
-    int ans =2, d,k,g;
-    for(int i=0;i<n;i++){
+    int ans =0, d,k,g;
+    for(int i=0;i<n-1;i++){
         for(int j=i+1;j<n;j++){
             d=R[j]-R[i];
             k=R[j];
@@ -33,5 +33,5 @@ int main(){
         }
     }
     cout << ans << endl;
-
+ 
 }
