@@ -34,6 +34,7 @@ ll ans(int i, int k, int state){
 }
 
 int main(){
+    std::ios_base::sync_with_stdio(false); cout.tie(NULL);
     cin >> n >> k;
     for(int i=0; i<n; i++){
         cin >> cc[i];
