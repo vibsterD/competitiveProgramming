@@ -11,8 +11,8 @@ int main(){
         for(int j=0; j<n; j++){
             cin >> A[j];
         }
-        next_permutation(A, A+n);
-        for(auto X:A)cout << X;
+        bool standIN = next_permutation(A, A+n);
+        for(auto X:A)cout << X << " ";
         cout << endl;
     }
 }
