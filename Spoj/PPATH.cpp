@@ -35,7 +35,7 @@ int main() {
 	int t;
 	cin >> t;
 	while(t--){	
-		int a,b;cin>>a>>b; cout << a << " " << b << endl;
+		int a,b;cin>>a>>b; //cout << a << " " << b << endl;
 		queue <int> q; int distance[10000], digit[4];
 		memset(distance, -1, sizeof(distance));
 		distance[a]=0;q.push(a);
@@ -48,14 +48,15 @@ int main() {
 					int check=toNum(digit);//cout << check << endl;
 					if((!prime[check])&&distance[check]==-1 && check>=1000){
 						distance[check]=distance[num]+1;
+						//if(check==b)cout << "DUMB" << distance[check] << endl;
 						q.push(check);
 					}
 				}
 			}
 			q.pop();
 		}
-		if(distance[b]=-1)cout<<"Impossible"<<endl;
+		if(distance[b]==-1)cout<<"Impossible"<<endl;
 		else cout<<distance[b]<<endl;
-		cout << distance[b] << endl;
+		//cout << distance[b] << endl;
 	}
 }
