@@ -1,7 +1,10 @@
-#include <iostream>
+#include <bits/stdc++.h>
+#define endl '\n'
+
 using namespace std;
-bool prime[10000]=false;
-memset(prime,0,sizeof(prime));
+
+bool prime[10000];
+//memset(prime,0,sizeof(prime));
 void PrimeSeive(){
 	for(int p=2;p*p<=9999;++p){
 		if(!prime[p]){
@@ -27,28 +30,32 @@ int toNum(int a[]){
 	return temp;
 }
 int main() {
+	std::ios_base::sync_with_stdio(false); cin.tie(NULL);
+	PrimeSeive();
 	int t;
 	cin >> t;
-	while(t--){
-		int a,b;cin>>a>>b;
-		queue <int> q; int distance[10000], int digit[4];
+	while(t--){	
+		int a,b;cin>>a>>b; cout << a << " " << b << endl;
+		queue <int> q; int distance[10000], digit[4];
 		memset(distance, -1, sizeof(distance));
 		distance[a]=0;q.push(a);
 		while(!q.empty()){
 			int num=q.front();
-			for(int i=0; i<=3; i++){
+			for(int i=3; i>=0; i--){
 				toArr(digit, num);
 				for(int j=0; j<10; j++){
 					digit[i]=j;
-					int check=toNum(digit);
-					if(Prime[check]){
+					int check=toNum(digit);//cout << check << endl;
+					if((!prime[check])&&distance[check]==-1 && check>=1000){
 						distance[check]=distance[num]+1;
 						q.push(check);
 					}
 				}
 			}
+			q.pop();
 		}
 		if(distance[b]=-1)cout<<"Impossible"<<endl;
 		else cout<<distance[b]<<endl;
+		cout << distance[b] << endl;
 	}
 }
