@@ -10,23 +10,25 @@ int n;
 
 vector <int> adj[100001];
 int A[100001], pr[100001];
-set <int> inProc;
+set <pair<int, int>> inProc;
 bool vis[100001]={false};
 ll ans = -INF;
 void DFS(int p){
     if(vis[p])return;
     vis[p]=true;
-    inProc.insert(p);
-    for(auto n:adj[p]){
-        for(auto s:inProc){
-            ans=max(ans, (ll)abs(A[s]-A[n]));
+    inProc.insert({A[p],p});
+    for(auto r:adj[p]){
+        if(!inProc.empty()){
+            pair<int,int> m=*inProc.rbegin();
+            ans =max(ans,(ll)m.first-A[r]);
         }
-        DFS(n);
+        DFS(r);
     }
-    inProc.erase(p);
+    inProc.erase({A[p],p});
 }
 
 int main(){
+    std::ios_base::sync_with_stdio(false); cin.tie(NULL);
     cin >> n;
     //int A[n], p[n];
     for(int i=0; i<n; i++)
