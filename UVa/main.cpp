@@ -7,39 +7,39 @@ typedef long long int ll;
 using namespace std;
 
 class SegmentTree{
-    vector <int> st,A, Lazy, Lazy2;
-    vector <bool> Lazy1;
+    vector <int> st,A, Lazy;
     int n;
     int left(int i){return i<<1;}
     int right(int i){return (i<<1)+1;}
 
     void LazyCheck(int node, int l, int r){
-        if(Lazy1[node]){
-            if(Lazy[node]==0){
+        if(Lazy[node]){
+            if(Lazy[node]==1){
                 st[node]=0;
                 if(l!=r){
-                    Lazy1[left(node)]=Lazy1[right(node)]=1;
-                    Lazy[left(node)]=Lazy[right(node)]=0;
-                }
-            }else if(Lazy[node]==1){
-                if(l!=r){
-                    st[node]=r-l+1;
-                    Lazy1[left(node)]=Lazy1[right(node)]=1;
                     Lazy[left(node)]=Lazy[right(node)]=1;
-                }else{
-                    st[node]=1;
+                }
+            }else if(Lazy[node]==2){
+                st[node]=r-l+1;
+                if(l!=r){
+                    Lazy[left(node)]=Lazy[right(node)]=2;
                 }
             }else{
-                if(l!=r){
-                    st[node]=(r-l+1)-st[node];
-                    Lazy1[left(node)]=Lazy1[right(node)]=1;
-                    Lazy[left(node)]=Lazy[right(node)]=3;
-                }else{
-                    st[node]=!st[node];
+                st[node]=(r-l+1)-st[node];
+                if(l!=r){                    
+                    Lazy[(left(node))]=applyFlip(left(node));
+                    Lazy[(right(node))]=applyFlip(right(node));
                 }
             }
-            Lazy1[node]=0;
+            Lazy[node]=0;
         }
+    }
+
+    int applyFlip(int i){
+      if(Lazy[i]==1)return 2;
+      if(Lazy[i]==2)return 1;
+      if(Lazy[i]==3)return 0;
+      return 3;
     }
 
     void build(int node, int i, int j){
@@ -56,28 +56,22 @@ class SegmentTree{
         LazyCheck(node,l,r);
         if(l>j || r<i)return;
         if(l>=i && r<=j){
-            if(type==0){
+            if(type==1){
                 st[node]=0;
                 if(l!=r){
-                    Lazy1[left(node)]=Lazy1[right(node)]=1;
-                    Lazy[left(node)]=Lazy[right(node)]=0;
-                }
-            }else if(type==1){
-                if(l!=r){
-                    st[node]=r-l+1;
-                    Lazy1[left(node)]=Lazy1[right(node)]=1;
                     Lazy[left(node)]=Lazy[right(node)]=1;
-                }else{
-                    st[node]=1;
+                }
+            }else if(type==2){
+                 st[node]=r-l+1;
+                if(l!=r){                   
+                    Lazy[left(node)]=Lazy[right(node)]=2;
                 }
             }else{
+                st[node]=(r-l+1)-st[node];
                 if(l!=r){
-                    st[node]=(r-l+1)-st[node];
-                    Lazy1[left(node)]=Lazy1[right(node)]=1;
-                    Lazy[left(node)]=Lazy[right(node)]=2;
-                }else{
-                    st[node]=!st[node];
-                }cout << "ABC: " << st[node] << 'l' << l << " " << r<< endl;
+                    Lazy[left(node)]=applyFlip(left(node));
+                    Lazy[right(node)]=applyFlip(right(node));
+                }
             }
             return;
         }
@@ -88,12 +82,11 @@ class SegmentTree{
     }
 
     int rmq(int node, int l, int r, int i, int j){
+        if(l>j || r<i)return 0;
         LazyCheck(node, l, r);
-        if(l>i || r<i)return 0;
         if(l>=i && r<=j)return st[node];
         int p1=rmq(left(node), l, (l+r)/2, i, j);
         int p2=rmq(right(node), (l+r)/2+1, r, i, j);
-        //cout << "asd " << p1 << ' ' << p2 << endl;
         return p1+p2;
     }
 
@@ -103,8 +96,6 @@ class SegmentTree{
         A=_A;
         n=A.size();
         st.assign(4*n,0);
-        Lazy1.assign(4*n,0);
-        Lazy2.assign(4*n,0);
         Lazy.assign(4*n,0);
         build(1, 0, n-1);
     }
@@ -130,7 +121,6 @@ int main(){
         for(int i=0; i<pirates.size(); i++){
             A.push_back(pirates[i]-'0');
         }
-        cout << pirates << endl;
         SegmentTree Pir(A);
         int q,cc=1;
         cin >> q;
@@ -139,11 +129,11 @@ int main(){
         while(q--){
             cin >> Q >> a >> b;
             if(Q=='F'){
-                Pir.update(a,b,1);
-            }else if(Q=='E'){
-                Pir.update(a,b,0);
-            }else if( Q=='I'){
                 Pir.update(a,b,2);
+            }else if(Q=='E'){
+                Pir.update(a,b,1);
+            }else if( Q=='I'){
+                Pir.update(a,b,3);
             }else{
                 cout << 'Q' << cc++ << ": " << Pir.rmq(a,b) << endl;
             }
