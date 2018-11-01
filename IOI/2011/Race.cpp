@@ -53,7 +53,6 @@ void dfs3(int u, int p, ll dista, int len){
 void Decompose(int u, int p){
     int n=dfs0(u,p);
     int centroid=dfs1(u,p,n);
-   // cout << "WE " << ans  << ' ' << n << ' ' << centroid << endl << flush;
     dfs2(centroid, p, 0, 0, 1);
     for(auto b:node[centroid]){
         if(b.first==p)continue;
